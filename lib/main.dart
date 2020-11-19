@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'Index.dart';
-import 'SplashScreen.dart';
+import 'login.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
+
 }
 
 class _MyAppState extends State<MyApp> {
@@ -20,12 +21,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         routes: {
           'index': (context) => Index(),
+
         },
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.green,
           primaryColor: Colors.green,
         ),
-        home: SplashScreen());
+        home: Login());
   }
 }
