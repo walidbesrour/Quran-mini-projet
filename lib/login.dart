@@ -270,13 +270,18 @@ class _LoginPageState extends State<LoginPage> {
                   CupertinoTextField(
                     // : Icons.person_sharp,
                       placeholder: "Enter email...",
+                     style: TextStyle(height: 2),
+
+
+
 
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: Color(0xFFBC7C7C7),
                               width: 2
                           ),
-                          borderRadius: BorderRadius.circular(50)
+                          borderRadius: BorderRadius.circular(50),
+
                       ),
 
 
@@ -289,7 +294,7 @@ class _LoginPageState extends State<LoginPage> {
                   CupertinoTextField(
                     // : Icons.person_sharp,
                       placeholder: "Enter passeword...",
-
+                      style: TextStyle(height: 2),
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: Color(0xFFBC7C7C7),
@@ -379,7 +384,7 @@ class _LoginPageState extends State<LoginPage> {
                   CupertinoTextField(
                    // : Icons.person_sharp,
                       placeholder: "Enter user...",
-
+                      style: TextStyle(height: 2),
                       decoration: BoxDecoration(
 
                       border: Border.all(
@@ -400,7 +405,7 @@ class _LoginPageState extends State<LoginPage> {
                   CupertinoTextField(
                     // : Icons.person_sharp,
                       placeholder: "Enter email...",
-
+                      style: TextStyle(height: 2),
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: Color(0xFFBC7C7C7),
@@ -419,7 +424,7 @@ class _LoginPageState extends State<LoginPage> {
                   CupertinoTextField(
                     // : Icons.person_sharp,
                       placeholder: "Enter passeword...",
-
+                      style: TextStyle(height: 2),
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: Color(0xFFBC7C7C7),
@@ -444,7 +449,7 @@ class _LoginPageState extends State<LoginPage> {
                       print(email);
                       print(username);
                       print(password);
-                      signup(email,password,username);
+                      signup(email,password,username,context);
 
                     },
                     ////////////////////////////////////////
@@ -629,8 +634,8 @@ class _PrimaryButtonState1 extends State<PrimaryButton1> {
   }
 }
 
-signup(email, password ,username) async {
-  var url = "http://192.168.171.241:8080/api/contacts"; // iOS
+signup(email, password ,username, BuildContext context) async {
+  var url = "http://172.17.190.145:8080/api/contacts"; // iOS
   final http.Response response = await http.post(
     url,
     headers: <String, String>{
@@ -644,19 +649,48 @@ signup(email, password ,username) async {
     }),
   );
 
-  if (response.statusCode == 201) {
+  if (response.statusCode == 200) {
+    showDialog(context: context, builder:(context)=>AlertDialog(
+      title: Text('successful registration'),
+      content: Text('successful registration you can use the app'),
+      actions: <Widget>[
+        FlatButton(onPressed: (){
+         Navigator.of(context).pop();
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Index()));
+        }, child: Text('OK'))
+      ],
+    ),);
+
+
   } else {
     print('**************************************');
-    throw Exception('Failed to create album.');
+
+    showDialog(context: context, builder:(context)=>AlertDialog(
+      title: Text('email used'),
+      content: Text('the email is already in use by another user'),
+      actions: <Widget>[
+        FlatButton(onPressed: (){
+          Navigator.of(context).pop();
+        }, child: Text('OK'))
+      ],
+    ),);
+
+
+   throw Exception('Failed to create album.');
+
+
+
+
 
   }
 }
+////////////////////////////////////
 
 login(email, password , BuildContext context) async {
   String em = email ;
   String ps = password ;
 
-  var url = "http://192.168.171.241:8080/api/login/"+em+"/"+ps; // iOS
+  var url = "http://172.17.190.145:8080/api/login/"+em+"/"+ps; // iOS
   final http.Response response = await http.get(
     url,
     headers: <String, String>{
@@ -673,6 +707,15 @@ login(email, password , BuildContext context) async {
   } else {
     print('******************nnnnnnnnnnn********************');
       Fluttertoast.showToast(msg: "login is failed");
+      showDialog(context: context, builder:(context)=>AlertDialog(
+        title: Text('identification error'),
+        content: Text('the specified account does not exist in database'),
+        actions: <Widget>[
+          FlatButton(onPressed: (){
+           Navigator.of(context).pop();
+          }, child: Text('OK'))
+        ],
+      ),);
 
 
   }
